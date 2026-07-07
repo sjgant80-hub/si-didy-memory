@@ -1,0 +1,25 @@
+{
+  "name": "@sjgant80-hub/si-didy-memory",
+  "version": "1.0.0",
+  "description": "PRIVATE · L1 upgrade · warm si-didy from fallmind-v2 cube on boot · 16-dim FemtoLLM cosine NN",
+  "type": "module",
+  "main": "si-didy-memory.js",
+  "exports": {
+    ".": "./si-didy-memory.js",
+    "./browser": "./browser-adapter.js"
+  },
+  "engines": {
+    "node": ">=22.5"
+  },
+  "keywords": [
+    "si-didy",
+    "fallmind",
+    "niceassos",
+    "warm-context",
+    "femtollm",
+    "miano-cube"
+  ],
+  "author": "Simon Gant · AI-Native Solutions",
+  "license": "MIT",
+  "private": true
+}

@@ -1,0 +1,280 @@
+<meta charset="utf-8">
+<title>si-didy-memory · L1 warm-context console</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ctext y='20' font-size='20'%3E◊%3C/text%3E%3C/svg%3E">
+<style>
+  :root {
+    --ox: #8b1a1a;
+    --brass: #b8974a;
+    --cream: #c4bfb2;
+    --void: #0b0a0f;
+    --dim: #2a2830;
+    --ok: #6b8e5a;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: var(--void); color: var(--cream);
+    font-family: 'IBM Plex Mono', ui-monospace, Menlo, Consolas, monospace;
+    font-size: 13px; line-height: 1.55; }
+  body {
+    background:
+      radial-gradient(circle at 10% 0%, rgba(139,26,26,0.06), transparent 50%),
+      radial-gradient(circle at 90% 100%, rgba(184,151,74,0.05), transparent 55%),
+      var(--void);
+    min-height: 100vh;
+    padding: 24px 32px 48px;
+  }
+  h1 { font-family: 'Libre Baskerville', Georgia, serif; color: var(--brass); font-weight: 400;
+    margin: 0 0 4px; font-size: 22px; letter-spacing: 0.02em; }
+  h1 .glyph { color: var(--ox); }
+  .sub { color: #7a7770; font-size: 11px; margin-bottom: 24px; }
+  .sub b { color: var(--cream); font-weight: 500; }
+  .grid { display: grid; grid-template-columns: 1.15fr 1fr; gap: 20px; }
+  @media (max-width: 900px) { .grid { grid-template-columns: 1fr; } }
+  .card { background: rgba(20, 18, 24, 0.7); border: 1px solid var(--dim);
+    border-radius: 4px; padding: 16px 18px; }
+  .card h2 { margin: 0 0 12px; font-family: 'Libre Baskerville', Georgia, serif;
+    font-size: 13px; font-weight: 400; color: var(--brass);
+    text-transform: uppercase; letter-spacing: 0.15em; }
+  label { display: block; font-size: 10px; letter-spacing: 0.1em;
+    text-transform: uppercase; color: #7a7770; margin: 10px 0 4px; }
+  input, textarea, select {
+    width: 100%; background: rgba(0,0,0,0.35); border: 1px solid var(--dim);
+    color: var(--cream); padding: 8px 10px; border-radius: 3px;
+    font-family: inherit; font-size: 12px; resize: vertical;
+  }
+  input:focus, textarea:focus, select:focus { outline: none; border-color: var(--brass); }
+  textarea { min-height: 90px; }
+  button {
+    display: inline-block; background: transparent; color: var(--brass);
+    border: 1px solid var(--brass); padding: 6px 14px; font-family: inherit;
+    font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase;
+    cursor: pointer; border-radius: 2px; margin: 8px 6px 0 0;
+    transition: all 0.15s;
+  }
+  button:hover { background: var(--brass); color: var(--void); }
+  button.primary { border-color: var(--ox); color: var(--ox); }
+  button.primary:hover { background: var(--ox); color: var(--cream); }
+  .metrics { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin: 6px 0 4px; }
+  .metric { background: rgba(0,0,0,0.35); border: 1px solid var(--dim);
+    padding: 8px 10px; border-radius: 3px; }
+  .metric .n { font-size: 20px; color: var(--brass);
+    font-family: 'Libre Baskerville', Georgia, serif; }
+  .metric .l { font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase;
+    color: #7a7770; margin-top: 2px; }
+  .results { max-height: 360px; overflow-y: auto; margin-top: 8px; }
+  .row { border-bottom: 1px dotted var(--dim); padding: 8px 0; }
+  .row:last-child { border-bottom: none; }
+  .score { display: inline-block; min-width: 52px; color: var(--ok);
+    font-variant-numeric: tabular-nums; }
+  .txt { color: var(--cream); }
+  .empty { color: #7a7770; font-style: italic; padding: 8px 0; }
+  pre.warm { background: rgba(0,0,0,0.5); border: 1px dashed var(--dim);
+    padding: 10px 12px; border-radius: 3px; max-height: 260px; overflow: auto;
+    color: var(--cream); white-space: pre-wrap; word-break: break-word; font-size: 11.5px; }
+  .log { max-height: 220px; overflow-y: auto; font-size: 11px; }
+  .log .l { padding: 3px 0; border-bottom: 1px dotted var(--dim); }
+  .log .t { color: #7a7770; margin-right: 8px; }
+  footer { color: #55524a; font-size: 10px; margin-top: 32px; text-align: center; }
+  .seal { color: var(--ox); }
+</style>
+
+<h1><span class="glyph">◊</span>·κ=φ⁴ &nbsp;<span style="color:var(--cream)">si-didy-memory</span></h1>
+<div class="sub">L1 warm-context console · <b>FallMind v2</b> cube.db · 16-dim FemtoLLM cosine NN · <b>PRIVATE</b></div>
+
+<div class="grid">
+  <div class="card">
+    <h2>warm-up query</h2>
+    <label for="hint">task hints</label>
+    <textarea id="hint" placeholder="e.g. fallreach outreach queue · linkedin swipes · today"></textarea>
+
+    <label for="ns">namespace</label>
+    <input id="ns" value="work">
+
+    <label for="k">top-k</label>
+    <input id="k" type="number" value="20" min="1" max="200">
+
+    <button class="primary" id="btnWarm">warm up</button>
+    <button id="btnSeed">seed with sample tokens</button>
+    <button id="btnClear">clear cube</button>
+
+    <label style="margin-top:16px">warm-context (prepend to first Claude message)</label>
+    <pre class="warm" id="warmOut">// awaiting warm-up…</pre>
+  </div>
+
+  <div class="card">
+    <h2>cube state</h2>
+    <div class="metrics">
+      <div class="metric"><div class="n" id="mTokens">0</div><div class="l">tokens</div></div>
+      <div class="metric"><div class="n" id="mWarms">0</div><div class="l">warm-ups</div></div>
+      <div class="metric"><div class="n" id="mHit">0%</div><div class="l">hit rate</div></div>
+      <div class="metric"><div class="n" id="mRem">0</div><div class="l">remembers</div></div>
+    </div>
+
+    <label>top-k matched tokens</label>
+    <div class="results" id="results"><div class="empty">nothing yet · fire a warm-up</div></div>
+
+    <label style="margin-top:16px">ingest single token</label>
+    <input id="one" placeholder="text to encode + store">
+    <button id="btnOne">ingest</button>
+
+    <label style="margin-top:16px">simulate a claude turn (remember)</label>
+    <input id="turnQ" placeholder="prompt">
+    <input id="turnA" placeholder="response" style="margin-top:4px">
+    <button id="btnTurn">remember</button>
+
+    <h2 style="margin-top:22px">recent warm-ups</h2>
+    <div class="log" id="log"><div class="empty">no activity yet</div></div>
+  </div>
+</div>
+
+<footer>
+  <span class="seal">◊</span>·κ=φ⁴ · prime 1289 · <b>Simon Gant</b> · architecture <b>Thomas Frumkin</b> ·
+  L1 upgrade for si-didy-agent · <i>the body is the receipt</i>
+</footer>
+
+<script type="module">
+  import SiDidyMemory from './browser-adapter.js';
+
+  const mem = new SiDidyMemory({ namespace: 'work', k: 20 });
+  window.SiDidyMemory = SiDidyMemory;
+  window.mem = mem;
+
+  const $ = (id) => document.getElementById(id);
+  const logEl = $('log');
+  const results = $('results');
+  const warmOut = $('warmOut');
+
+  await mem.open();
+  refreshMetrics();
+
+  function refreshMetrics() {
+    $('mTokens').textContent = mem.count();
+    const s = mem.getStats();
+    $('mWarms').textContent = s.warmups;
+    $('mHit').textContent = Math.round(s.hitRate * 100) + '%';
+    $('mRem').textContent = s.remembers;
+  }
+
+  function stamp() {
+    const d = new Date();
+    return d.toTimeString().slice(0, 8);
+  }
+
+  function pushLog(text) {
+    if (logEl.querySelector('.empty')) logEl.innerHTML = '';
+    const row = document.createElement('div');
+    row.className = 'l';
+    row.innerHTML = `<span class="t">${stamp()}</span>${text}`;
+    logEl.prepend(row);
+    while (logEl.children.length > 30) logEl.removeChild(logEl.lastChild);
+  }
+
+  async function doWarm() {
+    const hint = $('hint').value || '';
+    mem.namespace = $('ns').value || 'work';
+    mem.k = Math.max(1, Math.min(200, parseInt($('k').value) || 20));
+    const text = await mem.warmUp(hint);
+    warmOut.textContent = text;
+
+    // render top-k table by re-running the internal query for display
+    await renderTopK(hint);
+    pushLog(`warm-up · hint="${escapeHtml(hint).slice(0, 60)}"`);
+    refreshMetrics();
+  }
+
+  async function renderTopK(hint) {
+    // Reuse the same encode + brute-force cosine locally for display purposes.
+    const q = mem.femto.forward(mem.femto.encode(hint));
+    const res = mem.db.exec(
+      'SELECT text, vec FROM tokens WHERE namespace = ? AND dim = ?',
+      [mem.namespace, 16]
+    );
+    const rows = res[0] ? res[0].values : [];
+    if (!rows.length) {
+      results.innerHTML = '<div class="empty">cube is empty for this namespace</div>';
+      return;
+    }
+    const scored = rows.map(([text, vec]) => {
+      const bytes = vec instanceof Uint8Array ? vec : new Uint8Array(vec);
+      const v = new Float32Array(bytes.buffer, bytes.byteOffset, 16);
+      let dot = 0, na = 0, nb = 0;
+      for (let i = 0; i < 16; i++) { dot += q[i] * v[i]; na += q[i] * q[i]; nb += v[i] * v[i]; }
+      const denom = Math.sqrt(na) * Math.sqrt(nb);
+      return { text, score: denom > 0 ? dot / denom : 0 };
+    });
+    scored.sort((a, b) => b.score - a.score);
+    const top = scored.slice(0, mem.k);
+    results.innerHTML = top.map((r) =>
+      `<div class="row"><span class="score">${r.score.toFixed(3)}</span> <span class="txt">${escapeHtml(r.text)}</span></div>`
+    ).join('');
+  }
+
+  function escapeHtml(s) {
+    return String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  }
+
+  const SAMPLES = [
+    'fallreach outreach queue · linkedin swipes · approve/edit/reject',
+    'fallcolony forge chamber renamed to foundry',
+    'niceassos L1 = si-didy sensor · L5 = fallmind-v2 self',
+    'thomas frumkin miano cube · 9 nodes · CEN central hub',
+    'kcc ledger · konomi provenance · seq 17 ritual-dual',
+    'fallmind v2 · cube.db schema · tokens table dim 16 vec BLOB',
+    'wishwood no login until set-up · master session synth',
+    'fallrouter tier £0/£29/£199 · sovereign model orchestrator',
+    'fallenterprise · £20k-£200k AI transformation',
+    'fiverr 9 gigs launch pack · G1-G9 profile playbook',
+    'ACG GEO repo · six-layer AI-SEO surface · agent marketplace',
+    'estate mints · 241 NFTs on fallcolony · replay queue $KONO',
+    'suzen · necessity oracle · MUST/SHOULD/MAY',
+    'play is work doctrine · agents get pay',
+    'si-didy CDP attach · T2 tier · isolated debug profile',
+    'grep estate first · never reinvent · fallseed-pdfs',
+    'webllm first · save anthropic tokens on generation',
+    'no OneDrive · save local · Downloads/fallseed-pdfs',
+    'be water · adaptive targeting · multi-lane parallel',
+    'verify buyer-facing URLs · curl 200 before publish'
+  ];
+
+  $('btnWarm').onclick = doWarm;
+
+  $('btnSeed').onclick = async () => {
+    for (const s of SAMPLES) await mem.ingest(s, { seed: true });
+    pushLog(`seeded ${SAMPLES.length} sample tokens`);
+    refreshMetrics();
+  };
+
+  $('btnClear').onclick = async () => {
+    if (!confirm('wipe the entire cube.db in this browser?')) return;
+    await mem.clear();
+    await mem.open();
+    warmOut.textContent = '// awaiting warm-up…';
+    results.innerHTML = '<div class="empty">cube cleared</div>';
+    pushLog('cube cleared');
+    refreshMetrics();
+  };
+
+  $('btnOne').onclick = async () => {
+    const t = $('one').value.trim();
+    if (!t) return;
+    await mem.ingest(t);
+    $('one').value = '';
+    pushLog(`ingest · ${escapeHtml(t).slice(0, 60)}`);
+    refreshMetrics();
+  };
+
+  $('btnTurn').onclick = async () => {
+    const q = $('turnQ').value.trim();
+    const a = $('turnA').value.trim();
+    if (!q && !a) return;
+    const n = await mem.remember(q, a);
+    $('turnQ').value = ''; $('turnA').value = '';
+    pushLog(`remember · +${n} summary tokens`);
+    refreshMetrics();
+  };
+
+  // First-run: if cube empty, hint the user to seed
+  if (mem.count() === 0) {
+    warmOut.textContent = '// cube empty · click "seed with sample tokens" to try a warm-up';
+  }
+</script>
