@@ -1,5 +1,7 @@
 # si-didy-memory
 
+**Live:** [sjgant80-hub.github.io/si-didy-memory](https://sjgant80-hub.github.io/si-didy-memory/)
+
 > ◊·κ=φ⁴ · **PRIVATE · L1 upgrade for NiceAssOS**
 > Warm si-didy from FallMind v2's `cube.db` on boot · 16-dim FemtoLLM cosine NN
 > Architecture: **Thomas Frumkin** (MianoCube). Implementation: **Simon Gant**.
